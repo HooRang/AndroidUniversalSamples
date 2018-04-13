@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.hr.samples">
+
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <supports-screens
+        android:anyDensity="true"
+        android:largeScreens="true"
+        android:normalScreens="true" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true">
+
+        <activity
+            android:name=".MainActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:label="@string/app_name"
+            android:launchMode="singleTop"
+            android:excludeFromRecents="true"
+            android:screenOrientation="portrait">
+
+        </activity>
+
+        <activity
+            android:name=".AutoClickActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:label="AutoClickActivity"
+            android:launchMode="singleTop"
+            android:excludeFromRecents="true"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity
+            android:name=".permission.PermissionActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:label="AutoClickActivity"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".OpenByJavaScriptActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:label="OpenByJavaScriptActivity"
+            android:launchMode="singleTop"
+            android:excludeFromRecents="true"
+            android:screenOrientation="portrait">
+            <intent-filter android:autoVerify="true">
+                <!--js 启动app 目标activity需要配置项-->
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="hoorang"
+                    android:host="jsopenapp"
+                    />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>

